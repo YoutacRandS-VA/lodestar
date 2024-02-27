@@ -1,11 +1,12 @@
 import bls from "@chainsafe/bls";
-import {CoordType, PointFormat, PublicKey} from "@chainsafe/bls/types";
+import {CoordType, PointFormat, PublicKey, Signature} from "@chainsafe/bls/types";
 import {ISignatureSet, SignatureSetType} from "@lodestar/state-transition";
 import {VerifySignatureOpts} from "../interface.js";
 import {getAggregatedPubkey} from "../utils.js";
 import {LinkedList} from "../../../util/array.js";
 import {Metrics} from "../../../metrics/metrics.js";
 import {BlsWorkReq, WorkRequestSet} from "./types.js";
+import {randomBytesNonZero} from "./utils.js";
 
 export type JobQueueItem = JobQueueItemDefault | JobQueueItemSameMessage;
 
@@ -84,14 +85,24 @@ export function jobItemWorkReq(
       // However, for normal node with only 2 to 7 subnet subscriptions per epoch this works until 27M validators
       // and not a problem in the near future
       // this is monitored on v1.11.0 https://github.com/ChainSafe/lodestar/pull/5912#issuecomment-1700320307
-      const timer = metrics?.blsThreadPool.signatureDeserializationMainThreadDuration.startTimer();
-      const signatures = job.sets.map((set) => bls.Signature.fromBytes(set.signature, CoordType.affine, true));
-      timer?.();
 
-      const publicKey = bls.PublicKey.aggregate(job.sets.map((set) => set.publicKey));
+      // TODO: @tuyennhv is this still relevant? Will update the comment and metric if so
+      const timer = metrics?.blsThreadPool.signatureDeserializationMainThreadDuration.startTimer();
+
+      const publicKeys: PublicKey[] = [];
+      const signatures: Signature[] = [];
+      for (const set of job.sets) {
+        const randomness = randomBytesNonZero(8);
+        publicKeys.push(set.publicKey.multiplyBy(randomness));
+        signatures.push(bls.Signature.fromBytes(set.signature, CoordType.affine, true).multiplyBy(randomness));
+      }
+      const publicKey = bls.PublicKey.aggregate(publicKeys);
       // TODO: verify this is correct!!
       // @tuyennhv why should this not be done in the verification try/catch.  can throw for malformed signature
       const signature = bls.Signature.aggregate(signatures);
+
+      timer?.();
+
       return {
         opts: job.opts,
         sets: [
