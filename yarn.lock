@@ -293,9 +293,9 @@
     ethereum-cryptography "^2.0.0"
     uuid "^9.0.0"
 
-"@chainsafe/bls@ChainSafe/bls#e8bbc1a2dd803294c24a4db2ed2c9e05b714b92d":
+"@chainsafe/bls@ChainSafe/bls#bc6ecdc77fdfb643aa5a0ac0707e662c9cdb56a8":
   version "7.1.2"
-  resolved "https://codeload.github.com/ChainSafe/bls/tar.gz/e8bbc1a2dd803294c24a4db2ed2c9e05b714b92d"
+  resolved "https://codeload.github.com/ChainSafe/bls/tar.gz/bc6ecdc77fdfb643aa5a0ac0707e662c9cdb56a8"
   dependencies:
     "@chainsafe/bls-keygen" "^0.4.0"
     bls-eth-wasm "^0.4.8"
