@@ -42,6 +42,7 @@ export enum ValidatorClient {
 export enum ExecutionClient {
   Mock = "execution-mock",
   Geth = "execution-geth",
+  Builder = "execution-builder",
   Nethermind = "execution-nethermind",
 }
 
@@ -51,18 +52,27 @@ export enum ExecutionStartMode {
 }
 
 export type BeaconClientsOptions = {
-  [BeaconClient.Lodestar]: Partial<BeaconArgs & GlobalArgs>;
+  [BeaconClient.Lodestar]: BeaconArgs & GlobalArgs;
   [BeaconClient.Lighthouse]: Record<string, unknown>;
 };
 
 export type ValidatorClientsOptions = {
-  [ValidatorClient.Lodestar]: Partial<IValidatorCliArgs & GlobalArgs>;
+  [ValidatorClient.Lodestar]: IValidatorCliArgs & GlobalArgs;
   [ValidatorClient.Lighthouse]: Record<string, unknown>;
 };
 
 export type ExecutionClientsOptions = {
   [ExecutionClient.Mock]: string[];
   [ExecutionClient.Geth]: string[];
+  [ExecutionClient.Builder]: {
+    [key: string]: unknown;
+    builder?: {
+      beaconEndpoints?: string[];
+      cancellations?: boolean;
+      listenAddress?: string;
+      algo?: "mev-geth" | "greedy" | "greedy-buckets";
+    };
+  };
   [ExecutionClient.Nethermind]: string[];
 };
 
