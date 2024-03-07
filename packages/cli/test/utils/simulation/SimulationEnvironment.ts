@@ -108,7 +108,7 @@ export class SimulationEnvironment {
     this.logger.info(
       `Starting simulation environment "${this.options.id}". currentTime=${new Date(
         currentTime
-      ).toISOString()} simulationTimeout=${prettyMsToTime(opts.runTimeoutMs)}`
+      ).toISOString()} simulationTimeout=${prettyMsToTime(opts.runTimeoutMs)} rootDir=${this.options.rootDir}`
     );
 
     if (opts.runTimeoutMs > 0) {
@@ -277,8 +277,9 @@ export class SimulationEnvironment {
       paths: getNodePaths({id, logsDir: this.options.logsDir, client: beaconType, root: this.options.rootDir}),
     });
 
+    this.nodePairCount += 1;
+
     if (keys.type === "no-keys") {
-      this.nodePairCount += 1;
       return {id, execution: executionNode, beacon: beaconNode};
     }
 
@@ -305,8 +306,6 @@ export class SimulationEnvironment {
       beaconUrls,
       paths: getNodePaths({id, logsDir: this.options.logsDir, client: validatorType, root: this.options.rootDir}),
     });
-
-    this.nodePairCount += 1;
 
     return {id, execution: executionNode, beacon: beaconNode, validator: validatorNode};
   }
