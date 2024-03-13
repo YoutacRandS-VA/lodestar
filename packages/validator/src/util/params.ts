@@ -221,5 +221,10 @@ function getSpecCriticalParams(localConfig: ChainConfig): Record<keyof ConfigWit
 
     // ELECTRA
     MAX_DEPOSIT_RECEIPTS_PER_PAYLOAD: electraForkRelevant,
+    MIN_ACTIVATION_BALANCE: electraForkRelevant,
+    PENDING_BALANCE_DEPOSITS_LIMIT: electraForkRelevant,
+    PENDING_PARTIAL_WITHDRAWALS_LIMIT: electraForkRelevant,
+    PENDING_CONSOLIDATIONS_LIMIT: electraForkRelevant,
+    MAX_CONSOLIDATIONS: electraForkRelevant,
   };
 }
