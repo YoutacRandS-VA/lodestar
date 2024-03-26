@@ -5,6 +5,10 @@ import {
   EPOCHS_PER_SYNC_COMMITTEE_PERIOD,
   SLOTS_PER_EPOCH,
   MAX_DEPOSIT_RECEIPTS_PER_PAYLOAD,
+  MAX_CONSOLIDATIONS,
+  PENDING_BALANCE_DEPOSITS_LIMIT,
+  PENDING_CONSOLIDATIONS_LIMIT,
+  PENDING_PARTIAL_WITHDRAWALS_LIMIT,
 } from "@lodestar/params";
 import {ssz as primitiveSsz} from "../primitive/index.js";
 import {ssz as phase0Ssz} from "../phase0/index.js";
