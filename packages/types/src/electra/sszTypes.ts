@@ -29,10 +29,20 @@ export const DepositReceipt = new ContainerType(
 
 export const DepositReceipts = new ListCompositeType(DepositReceipt, MAX_DEPOSIT_RECEIPTS_PER_PAYLOAD);
 
+export const ExecutionLayerWithdrawRequest = new ContainerType(
+  {
+    sourceAddress: ExecutionAddress,
+    validatorPubkey: BLSPubkey,
+    amount: Gwei,
+  },
+  {typeName: "ExecutionLayerWithdrawRequest", jsonCase: "eth2"}
+);
+
 export const ExecutionPayload = new ContainerType(
   {
     ...denebSsz.ExecutionPayload.fields,
     depositReceipts: DepositReceipts, // New in ELECTRA
+    withdrawaRequests: new ListCompositeType(ExecutionLayerWithdrawRequest, 16), // TODO Electra: Pending finalizing the naming of this field and length limit
   },
   {typeName: "ExecutionPayload", jsonCase: "eth2"}
 );
@@ -94,6 +104,7 @@ export const BeaconBlockBody = new ContainerType(
 export const BeaconBlock = new ContainerType(
   {
     ...denebSsz.BeaconBlock.fields,
+    body: BeaconBlockBody, // Modified in ELECTRA
     body: BeaconBlockBody, // Modified in ELECTRA
   },
   {typeName: "BeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true}
@@ -314,13 +325,4 @@ export const SSEPayloadAttributes = new ContainerType(
     payloadAttributes: PayloadAttributes,
   },
   {typeName: "SSEPayloadAttributes", jsonCase: "eth2"}
-);
-
-export const ExecutionLayerWithdrawRequest = new ContainerType(
-  {
-    sourceAddress: ExecutionAddress,
-    validatorPubkey: BLSPubkey,
-    amount: Gwei,
-  },
-  {typeName: "ExecutionLayerWithdrawRequest", jsonCase: "eth2"}
 );
