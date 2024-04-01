@@ -16,9 +16,22 @@ import {ssz as altairSsz} from "../altair/index.js";
 import {ssz as bellatrixSsz} from "../bellatrix/index.js";
 import {ssz as capellaSsz} from "../capella/index.js";
 import {ssz as denebSsz} from "../deneb/index.js";
-import { MAX_CONSOLIDATIONS, PENDING_BALANCE_DEPOSITS_LIMIT, PENDING_CONSOLIDATIONS_LIMIT, PENDING_PARTIAL_WITHDRAWALS_LIMIT } from "@lodestar/params";
 
-const {Epoch, Gwei, ValidatorIndex, ExecutionAddress, UintNum64, Slot, Root, BLSSignature, UintBn256, Bytes32, BLSPubkey, DepositIndex, UintBn64} = primitiveSsz;
+const {
+  Epoch,
+  Gwei,
+  ValidatorIndex,
+  ExecutionAddress,
+  UintNum64,
+  Slot,
+  Root,
+  BLSSignature,
+  UintBn256,
+  Bytes32,
+  BLSPubkey,
+  DepositIndex,
+  UintBn64,
+} = primitiveSsz;
 
 export const DepositReceipt = new ContainerType(
   {
@@ -76,23 +89,6 @@ export const SignedConsolidation = new ContainerType(
   {typeName: "SignedConsolidation", jsonCase: "eth2"}
 );
 
-export const Consolidation = new ContainerType(
-  {
-    sourceIndex: ValidatorIndex,
-    targetIndex: ValidatorIndex,
-    epoch: Epoch,
-  },
-  {typeName: "Consolidation", jsonCase: "eth2"}
-);
-
-export const SignedConsolidation = new ContainerType(
-  {
-    message: Consolidation,
-    signature: BLSSignature,
-  },
-  {typeName: "SignedConsolidation", jsonCase: "eth2"}
-);
-
 // We have to preserve Fields ordering while changing the type of ExecutionPayload
 export const BeaconBlockBody = new ContainerType(
   {
@@ -108,7 +104,6 @@ export const BeaconBlockBody = new ContainerType(
 export const BeaconBlock = new ContainerType(
   {
     ...denebSsz.BeaconBlock.fields,
-    body: BeaconBlockBody, // Modified in ELECTRA
     body: BeaconBlockBody, // Modified in ELECTRA
   },
   {typeName: "BeaconBlock", jsonCase: "eth2", cachePermanentRootStruct: true}
